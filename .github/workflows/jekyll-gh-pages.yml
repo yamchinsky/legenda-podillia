@@ -1,4 +1,3 @@
-# Workflow for building and deploying a Vite + React app to GitHub Pages
 name: Deploy Vite React App to GitHub Pages
 
 on:
@@ -36,7 +35,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist  # Make sure it matches your build output folder
+          path: ./dist
 
   deploy:
     environment:
