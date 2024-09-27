@@ -33,11 +33,11 @@ export const App = () => {
           <div className="flex flex-col min-h-screen overflow-hidden pt-2 bg-white">
             <Header />
             <Routes>
-              <Route path="/" element={<MainContent />} />
-              <Route path="/reports" element={<Reports />} />
-              <Route path="/reports/:id" element={<ReportsItem />} />
+              <Route path="/legenda-podillia" element={<MainContent />} />
+              <Route path="/legenda-podillia/reports" element={<Reports />} />
+              <Route path="/legenda-podillia/reports/:id" element={<ReportsItem />} />
               <Route
-                path="/upload/reports"
+                path="/legenda-podillia/upload/reports"
                 element={
                   renderProtectedRoute(UploadReports) // Use the protected route handler
                 }
