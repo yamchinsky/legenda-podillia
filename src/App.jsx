@@ -28,7 +28,7 @@ export const App = () => {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <Router basename={import.meta.env.NODE_ENV === 'production' ? '/legenda-podillia' : '/'}>
+        <Router basename={import.meta.env.MODE === 'production' ? '/legenda-podillia' : '/'}>
           <div className="flex flex-col min-h-screen overflow-hidden pt-2 bg-white">
             <Header />
             <Routes>
