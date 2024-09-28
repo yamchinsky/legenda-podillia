@@ -38,7 +38,7 @@ export const App = () => {
               <Route
                 path="/upload/reports"
                 element={
-                  renderProtectedRoute(UploadReports) // Use the protected route handler
+                  renderProtectedRoute(UploadReports)
                 }
               />
             </Routes>

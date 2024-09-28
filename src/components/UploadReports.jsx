@@ -1,11 +1,58 @@
-import React, { useState } from 'react';
-import { Upload, Button } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import React, { useEffect, useState } from 'react';
+import { Upload, Button, Card, Row, Col, Input, Modal, Typography, Space, message } from 'antd';
+import { UploadOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import axios from 'axios';
+
+const { Text } = Typography;
 
 export const UploadReports = ({ token }) => {
   const [fileList, setFileList] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
+  const [editingFile, setEditingFile] = useState(null);
+  const [newFileName, setNewFileName] = useState('');
+
+  useEffect(() => {
+    const fetchFiles = async () => {
+      const owner = import.meta.env.VITE_GITHUB_OWNER;
+      const repo = import.meta.env.VITE_GITHUB_REPO;
+      const path = import.meta.env.VITE_GITHUB_REPO_PATH;
+      const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+
+      try {
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: `token ${token}`,
+            Accept: 'application/vnd.github.v3+json',
+          },
+        });
+
+        const filesWithDates = await Promise.all(
+          response.data.map(async (file) => {
+            const commitsUrl = `https://api.github.com/repos/${owner}/${repo}/commits?path=${file.path}&per_page=1`;
+            try {
+              const commitsResponse = await axios.get(commitsUrl, {
+                headers: {
+                  Authorization: `token ${token}`,
+                  Accept: 'application/vnd.github.v3+json',
+                },
+              });
+              const lastModified = commitsResponse.data[0]?.commit.author.date || 'Unknown';
+              return { ...file, lastModified };
+            } catch {
+              return { ...file, lastModified: 'Unknown' };
+            }
+          })
+        );
+
+        setFileList(filesWithDates);
+      } catch (error) {
+        console.error('Error fetching files:', error);
+        message.error('Failed to fetch files from GitHub.');
+      }
+    };
+
+    fetchFiles();
+  }, [token]);
 
   const customRequest = ({ onSuccess }) => {
     onSuccess('ok');
@@ -24,13 +71,18 @@ export const UploadReports = ({ token }) => {
       }
     });
 
-    setFileList(newFileList);
+    setFileList([...uniqueFiles.values()]);
 
     const owner = import.meta.env.VITE_GITHUB_OWNER;
     const repo = import.meta.env.VITE_GITHUB_REPO;
     const path = import.meta.env.VITE_GITHUB_REPO_PATH;
 
     for (const file of uniqueFiles.values()) {
+      if (!(file instanceof Blob)) {
+        console.error('Invalid file type passed to FileReader:', file);
+        continue;
+      }
+
       const reader = new FileReader();
 
       reader.onloadend = async () => {
@@ -57,10 +109,10 @@ export const UploadReports = ({ token }) => {
             }
           );
 
-          alert(`File ${file.name} uploaded successfully.`);
+          message.success(`File ${file.name} uploaded successfully.`);
         } catch (uploadError) {
           console.error('Error uploading file:', uploadError);
-          alert(`Failed to upload ${file.name} to GitHub.`);
+          message.error(`Failed to upload ${file.name} to GitHub.`);
         } finally {
           setIsUploading(false);
         }
@@ -70,13 +122,95 @@ export const UploadReports = ({ token }) => {
     }
   };
 
+  const handleRename = async (file) => {
+    const owner = import.meta.env.VITE_GITHUB_OWNER;
+    const repo = import.meta.env.VITE_GITHUB_REPO;
+    const path = import.meta.env.VITE_GITHUB_REPO_PATH;
+    const newPath = `${path}/${newFileName}`;
+    const url = `https://api.github.com/repos/${owner}/${repo}/contents/${file.path}`;
+
+    try {
+      const getFileResponse = await axios.get(url, {
+        headers: {
+          Authorization: `token ${token}`,
+          Accept: 'application/vnd.github.v3+json',
+        },
+      });
+
+      const sha = getFileResponse.data.sha;
+
+      await axios.put(
+        `https://api.github.com/repos/${owner}/${repo}/contents/${newPath}`,
+        {
+          message: `Renamed ${file.name} to ${newFileName}`,
+          sha,
+          content: getFileResponse.data.content,
+        },
+        {
+          headers: {
+            Authorization: `token ${token}`,
+            Accept: 'application/vnd.github.v3+json',
+          },
+        }
+      );
+
+      message.success(`File renamed successfully.`);
+      setFileList((prev) =>
+        prev.map((f) =>
+          f.sha === file.sha ? { ...f, name: newFileName, path: newPath, sha } : f
+        )
+      );
+      setEditingFile(null);
+      setNewFileName('');
+    } catch (error) {
+      console.error('Error renaming file:', error);
+      message.error('Failed to rename the file.');
+    }
+  };
+
+  const handleDelete = async (file) => {
+    const owner = import.meta.env.VITE_GITHUB_OWNER;
+    const repo = import.meta.env.VITE_GITHUB_REPO;
+    const url = `https://api.github.com/repos/${owner}/${repo}/contents/${file.path}`;
+
+    try {
+      const getFileResponse = await axios.get(url, {
+        headers: {
+          Authorization: `token ${token}`,
+          Accept: 'application/vnd.github.v3+json',
+        },
+      });
+
+      await axios.delete(url, {
+        headers: {
+          Authorization: `token ${token}`,
+          Accept: 'application/vnd.github.v3+json',
+        },
+        data: {
+          message: `Deleted ${file.name}`,
+          sha: getFileResponse.data.sha,
+        },
+      });
+
+      message.success(`File ${file.name} deleted successfully.`);
+      setFileList((prev) => prev.filter((f) => f.sha !== file.sha));
+    } catch (error) {
+      console.error('Error deleting file:', error);
+      message.error('Failed to delete the file.');
+    }
+  };
+
   return (
     <div className="p-6 bg-gray-100 min-h-screen flex flex-col items-center">
       <h1 className="text-3xl font-bold mb-4">Upload Reports</h1>
       <Upload
         multiple
         accept=".xls,.xlsx,.txt,.doc,.docx,.jpg,.jpeg,.png,.svg,.img"
-        fileList={fileList}
+        fileList={fileList.map((file) => ({
+          uid: file.sha,
+          name: file.name,
+          status: 'done',
+        }))}
         onChange={handleFileUpload}
         customRequest={customRequest}
         showUploadList={false}
@@ -85,6 +219,56 @@ export const UploadReports = ({ token }) => {
           Upload Files
         </Button>
       </Upload>
+
+      <Row gutter={[16, 16]} style={{ marginTop: 20, justifyContent: 'center' }}>
+        {fileList.map((file) => (
+          <Col key={file.sha} xs={16} sm={12} md={8} lg={6}>
+            <Card
+              title={
+                <Text ellipsis={{ tooltip: file.name }} style={{ maxWidth: '100%' }}>
+                  {file.name}
+                </Text>
+              }
+              actions={[
+                <EditOutlined
+                  key="edit"
+                  onClick={() => {
+                    setEditingFile(file);
+                    setNewFileName(file.name);
+                  }}
+                />,
+                <DeleteOutlined
+                  key="delete"
+                  onClick={() => handleDelete(file)}
+                  style={{ color: 'red' }}
+                />,
+              ]}
+            >
+              <Space direction="vertical">
+                <Text type="secondary">
+                  Last modified: {new Date(file.lastModified).toLocaleString()}
+                </Text>
+                <Button type="primary" onClick={() => window.open(file.download_url, '_blank')}>
+                  View File
+                </Button>
+              </Space>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+
+      <Modal
+        title={`Rename ${editingFile?.name}`}
+        visible={!!editingFile}
+        onOk={() => handleRename(editingFile)}
+        onCancel={() => setEditingFile(null)}
+      >
+        <Input
+          value={newFileName}
+          onChange={(e) => setNewFileName(e.target.value)}
+          placeholder="Enter new file name"
+        />
+      </Modal>
     </div>
   );
 };
