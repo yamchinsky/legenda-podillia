@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
-import { store, persistor } from './redux/store';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { AboutUs } from './components/AboutUs';
@@ -26,27 +23,24 @@ export const App = () => {
   };
 
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <Router basename={import.meta.env.MODE === 'production' ? '/legenda-podillia' : '/'}>
-          <div className="flex flex-col min-h-screen overflow-hidden pt-2 bg-white">
-            <Header />
-            <Routes>
-              <Route path="/" element={<MainContent />} />
-              <Route path="/reports" element={<Reports />} />
-              <Route path="/reports/:id" element={<ReportsItem />} />
-              <Route
-                path="/upload/reports"
-                element={
-                  renderProtectedRoute(UploadReports)
-                }
-              />
-            </Routes>
-            <Footer />
-          </div>
-        </Router>
-      </PersistGate>
-    </Provider>
+
+    <Router basename={import.meta.env.MODE === 'production' ? '/legenda-podillia' : '/'}>
+      <div className="flex flex-col min-h-screen overflow-hidden pt-2 bg-white">
+        <Header />
+        <Routes>
+          <Route path="/" element={<MainContent />} />
+          <Route path="/reports" element={<Reports />} />
+          <Route path="/reports/:id" element={<ReportsItem />} />
+          <Route
+            path="/upload/reports"
+            element={
+              renderProtectedRoute(UploadReports)
+            }
+          />
+        </Routes>
+        <Footer />
+      </div>
+    </Router>
   );
 };
 
