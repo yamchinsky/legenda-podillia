@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Spin } from 'antd';
+import { Spin, Card } from 'antd';
 import axios from 'axios';
-import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
-import "@cyntler/react-doc-viewer/dist/index.css";
+import DocViewer, { DocViewerRenderers } from '@cyntler/react-doc-viewer';
+import '@cyntler/react-doc-viewer/dist/index.css';
 
 export const ReportsItem = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [docs, setDocs] = useState([]);
-  
-    const getMimeType = (filename) => {
-      const extension = filename.split('.').pop().toLowerCase();
-      const mimeTypes = {
+
+  const getMimeType = (filename) => {
+    const extension = filename.split('.').pop().toLowerCase();
+    const mimeTypes = {
       pdf: 'application/pdf',
       jpg: 'image/jpeg',
       jpeg: 'image/jpeg',
@@ -28,12 +28,11 @@ export const ReportsItem = () => {
       csv: 'text/csv',
       mp4: 'video/mp4',
       mp3: 'audio/mpeg',
-      };
-  
-      return mimeTypes[extension] || 'application/octet-stream';
     };
-  
-  
+
+    return mimeTypes[extension] || 'application/octet-stream';
+  };
+
   useEffect(() => {
     const fetchFile = async () => {
       const owner = import.meta.env.VITE_GITHUB_OWNER;
@@ -45,18 +44,18 @@ export const ReportsItem = () => {
       setLoading(true);
       try {
         const response = await axios.get(url, {
-            headers: {
-              Authorization: `token ${token}`,
-              Accept: 'application/vnd.github.v3.raw',
-            },
-            responseType: 'blob',
+          headers: {
+            Authorization: `token ${token}`,
+            Accept: 'application/vnd.github.v3.raw',
+          },
+          responseType: 'blob',
         });
-        
-        // const currentFileUrl = window.URL.createObjectURL(new Blob([response.data]));
-        const currentFileUrl = window.URL.createObjectURL(new Blob([response.data], { type: getMimeType(id) }));
 
-        console.log('currentFileUrl', currentFileUrl);
-        setDocs([{uri: currentFileUrl}]);
+        const currentFileUrl = window.URL.createObjectURL(
+          new Blob([response.data], { type: getMimeType(id) })
+        );
+
+        setDocs([{ uri: currentFileUrl }]);
       } catch (error) {
         console.error('Error fetching files:', error);
         alert('Failed to fetch files from GitHub.');
@@ -64,33 +63,37 @@ export const ReportsItem = () => {
         setLoading(false);
       }
     };
+
     fetchFile();
-  }, []);
+  }, [id]);
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen flex flex-col items-center">
       <h1 className="text-3xl font-bold mb-4">{id}</h1>
-      <div style={{ padding: '20px' }}>
+      <Card
+        style={{ width: '100%', maxWidth: 800 }}
+        bodyStyle={{ padding: 20, display: 'flex', justifyContent: 'center' }}
+      >
         <Spin spinning={loading} tip="Loading...">
           <div id="viewer" style={{ padding: '20px' }}>
-            {docs.length &&
+            {docs.length > 0 && (
               <DocViewer
-              documents={docs}
-              pluginRenderers={DocViewerRenderers}
-              theme={{
-              primary: "#5296d8",
-              secondary: "#ffffff",
-              tertiary: "#5296d899",
-              textPrimary: "#ffffff",
-              textSecondary: "#5296d8",
-              textTertiary: "#00000099",
-              disableThemeScrollbar: false,
-              }}
-            />
-            }
+                documents={docs}
+                pluginRenderers={DocViewerRenderers}
+                theme={{
+                  primary: '#5296d8',
+                  secondary: '#ffffff',
+                  tertiary: '#5296d899',
+                  textPrimary: '#ffffff',
+                  textSecondary: '#5296d8',
+                  textTertiary: '#00000099',
+                  disableThemeScrollbar: false,
+                }}
+              />
+            )}
           </div>
         </Spin>
-      </div>
+      </Card>
     </div>
   );
 };

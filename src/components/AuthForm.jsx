@@ -34,7 +34,7 @@ export const AuthForm = ({ setToken }) => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <form onSubmit={handleTokenValidation} className="flex flex-col items-center gap-4 p-6 bg-gray-200 rounded-lg shadow-lg">
+      <form onSubmit={handleTokenValidation} className="flex flex-col items-center gap-4 p-6 bg-gray-200 rounded-lg shadow-lg" style={{ marginTop: '-50vh' }}>
         <h2 className="text-xl font-semibold">Enter Private Token to Access</h2>
         <input
           type="password"
