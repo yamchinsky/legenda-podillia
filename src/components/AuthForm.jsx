@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { message } from 'antd';
 
 export const AuthForm = ({ setToken }) => {
   const [inputToken, setInputToken] = useState('');
@@ -25,7 +26,7 @@ export const AuthForm = ({ setToken }) => {
 
       setToken(inputToken);
       setError('');
-      alert('Token validated successfully! Access granted.');
+      message.success('Token validated successfully! Access granted.');
     } catch (error) {
       setError('Invalid token or insufficient permissions. Please enter a valid private GitHub token with write access.');
       console.error('Invalid GitHub token:', error);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Row, Col, Typography, Spin } from 'antd';
+import { Card, Row, Col, Typography, Spin, message } from 'antd';
 import axios from 'axios';
 import { FileTextOutlined } from '@ant-design/icons';
 
@@ -29,7 +29,7 @@ export const Reports = () => {
         setFiles(response.data);
       } catch (error) {
         console.error('Error fetching files:', error);
-        alert('Failed to fetch files from GitHub.');
+        message.error('Failed to fetch files from GitHub.');
       } finally {
         setLoading(false);
       }

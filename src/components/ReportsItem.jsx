@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Spin, Card } from 'antd';
+import { Spin, Card, message } from 'antd';
 import axios from 'axios';
 import DocViewer, { DocViewerRenderers } from '@cyntler/react-doc-viewer';
 import '@cyntler/react-doc-viewer/dist/index.css';
@@ -58,7 +58,7 @@ export const ReportsItem = () => {
         setDocs([{ uri: currentFileUrl }]);
       } catch (error) {
         console.error('Error fetching files:', error);
-        alert('Failed to fetch files from GitHub.');
+        message.error('Failed to fetch files from GitHub.');
       } finally {
         setLoading(false);
       }
