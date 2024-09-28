@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+import { Modal, Input, Button, message } from 'antd';
 import axios from 'axios';
-import { message } from 'antd';
 
 export const AuthForm = ({ setToken }) => {
   const [inputToken, setInputToken] = useState('');
   const [error, setError] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(true);
 
   const handleTokenValidation = async (e) => {
     e.preventDefault();
@@ -27,6 +28,7 @@ export const AuthForm = ({ setToken }) => {
       setToken(inputToken);
       setError('');
       message.success('Token validated successfully! Access granted.');
+      setIsModalOpen(false);
     } catch (error) {
       setError('Invalid token or insufficient permissions. Please enter a valid private GitHub token with write access.');
       console.error('Invalid GitHub token:', error);
@@ -34,24 +36,29 @@ export const AuthForm = ({ setToken }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <form onSubmit={handleTokenValidation} className="flex flex-col items-center gap-4 p-6 bg-gray-200 rounded-lg shadow-lg" style={{ marginTop: '-50vh' }}>
-        <h2 className="text-xl font-semibold">Enter Private Token to Access</h2>
-        <input
+    <Modal
+      title="Enter Private Token to Access"
+      open={isModalOpen}
+      onCancel={() => setIsModalOpen(false)}
+      footer={null}
+    >
+      <form onSubmit={handleTokenValidation} className="flex flex-col items-center gap-4">
+        <Input
           type="password"
           placeholder="Enter GitHub private token"
           value={inputToken}
           onChange={(e) => setInputToken(e.target.value)}
           className="px-4 py-2 border border-gray-400 rounded"
         />
-        <button
-          type="submit"
-          className="px-4 py-2 font-semibold text-white bg-blue-500 rounded hover:bg-blue-600"
+        <Button
+          type="primary"
+          htmlType="submit"
+          className="font-semibold"
         >
           Submit
-        </button>
+        </Button>
         {error && <p className="text-red-500">{error}</p>}
       </form>
-    </div>
+    </Modal>
   );
 };

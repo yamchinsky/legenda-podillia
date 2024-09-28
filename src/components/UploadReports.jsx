@@ -169,18 +169,18 @@ export const UploadReports = ({ token }) => {
   };
 
   const handleDelete = async (file) => {
+    const fileMetadata = await fetchFileMetadata(file);
+    if (!fileMetadata || !fileMetadata.sha) {
+      message.error('Unable to retrieve the file information for deletion.');
+      return;
+    }
+  
+    const { sha } = fileMetadata;
     const owner = import.meta.env.VITE_GITHUB_OWNER;
     const repo = import.meta.env.VITE_GITHUB_REPO;
     const url = `https://api.github.com/repos/${owner}/${repo}/contents/${file.path}`;
-
+  
     try {
-      const getFileResponse = await axios.get(url, {
-        headers: {
-          Authorization: `token ${token}`,
-          Accept: 'application/vnd.github.v3+json',
-        },
-      });
-
       await axios.delete(url, {
         headers: {
           Authorization: `token ${token}`,
@@ -188,17 +188,47 @@ export const UploadReports = ({ token }) => {
         },
         data: {
           message: `Deleted ${file.name}`,
-          sha: getFileResponse.data.sha,
+          sha,
         },
       });
-
+  
       message.success(`File ${file.name} deleted successfully.`);
-      setFileList((prev) => prev.filter((f) => f.sha !== file.sha));
+      setFileList((prev) => prev.filter((f) => f.sha !== sha));
     } catch (error) {
       console.error('Error deleting file:', error);
-      message.error('Failed to delete the file.');
+      if (error.response?.status === 422) {
+        message.error('Failed to delete the file. The file might have been modified or deleted already.');
+      } else {
+        message.error('Failed to delete the file. Please check if the file exists and has the correct permissions.');
+      }
     }
   };
+
+  const fetchFileMetadata = async (file) => {
+    const owner = import.meta.env.VITE_GITHUB_OWNER;
+    const repo = import.meta.env.VITE_GITHUB_REPO;
+    const url = `https://api.github.com/repos/${owner}/${repo}/contents/${file.path}`;
+  
+    try {
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `token ${token}`,
+          Accept: 'application/vnd.github.v3+json',
+        },
+      });
+  
+      if (!response.data.sha) {
+        console.error('Unexpected response format:', response.data);
+        message.error('Failed to retrieve the correct file metadata.');
+        return null;
+      }
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching file metadata:', error);
+      message.error('Failed to fetch file metadata.');
+      return null;
+    }
+  };  
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen flex flex-col items-center">
@@ -259,7 +289,7 @@ export const UploadReports = ({ token }) => {
 
       <Modal
         title={`Rename ${editingFile?.name}`}
-        visible={!!editingFile}
+        open={!!editingFile}
         onOk={() => handleRename(editingFile)}
         onCancel={() => setEditingFile(null)}
       >
