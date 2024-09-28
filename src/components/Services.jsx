@@ -7,7 +7,6 @@ export const Services = () => {
   const services = [
     {
       imageSrc:
-        // 'https://cdn.builder.io/api/v1/image/assets/TEMP/7f2cf0e4-b427-4712-9182-8c82ddd6c375?placeholderIfAbsent=true&apiKey=abebaea06a0b4baf870a7ab86f500c96',
       meds,
       title: 'Допомога з медикаментами',
       bgColor: 'bg-red-500',
@@ -15,20 +14,17 @@ export const Services = () => {
     {
       imageSrc:
       food,
-        // 'https://cdn.builder.io/api/v1/image/assets/TEMP/5175c859-1862-47d5-a305-13a84e12b0c2?placeholderIfAbsent=true&apiKey=abebaea06a0b4baf870a7ab86f500c96',
       title: 'Постачання продуктів харчування та непродовольчих товарів',
       bgColor: 'bg-lime-400',
     },
     {
       imageSrc:
-        // 'https://cdn.builder.io/api/v1/image/assets/TEMP/d0c86078-b6b1-41ff-bc63-e89b09e75d55?placeholderIfAbsent=true&apiKey=abebaea06a0b4baf870a7ab86f500c96',
       people,
       title: 'Поміч людям, потерпілим від окупації',
       bgColor: 'bg-amber-500',
     },
     {
       imageSrc:
-        // 'https://cdn.builder.io/api/v1/image/assets/TEMP/f069d366-f5f3-4e3d-a820-a962405acf44?placeholderIfAbsent=true&apiKey=abebaea06a0b4baf870a7ab86f500c96',
       tools,
       title: 'Допомога з технічним обладнанням',
       bgColor: 'bg-blue-500',

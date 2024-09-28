@@ -15,7 +15,6 @@ export const CallToAction = () => {
         </div>
         <img
         src={contactUsImg}
-          // src="https://cdn.builder.io/api/v1/image/assets/TEMP/ea6952cd-0e19-4349-a7b8-e2f5db9700da?placeholderIfAbsent=true&apiKey=abebaea06a0b4baf870a7ab86f500c96"
           alt="Collaboration illustration"
           className="object-contain mt-12 lg:mt-0 w-full lg:w-1/2 rounded-2xl"
         />

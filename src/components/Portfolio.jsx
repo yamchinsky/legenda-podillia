@@ -7,19 +7,16 @@ export const Portfolio = () => {
     {
       imageSrc:
       portfolio1,
-        // 'https://scontent-iev1-1.cdninstagram.com/v/t51.29350-15/449799452_511174187917783_6176224725900920757_n.jpg?stp=dst-jpg_e15&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMDgweDE5MjAuc2RyLmYyOTM1MC5kZWZhdWx0X2NvdmVyX2ZyYW1lIn0&_nc_ht=scontent-iev1-1.cdninstagram.com&_nc_cat=107&_nc_ohc=z8HpZwk6yxMQ7kNvgGdQ-Ha&edm=APoiHPcBAAAA&ccb=7-5&ig_cache_key=MzQwNTAxMTc4MjAwMTM1Mjg0Mw%3D%3D.3-ccb7-5&oh=00_AYA59AreOvxgie-yEGOISV6Zk4bsfzDTW81g-NhVZbvW4w&oe=66F9A0C2&_nc_sid=22de04',
       title: 'Design Furniture App',
     },
     {
       imageSrc:
-        // 'https://scontent-iev1-1.cdninstagram.com/v/t39.30808-6/436206850_18041410402843204_2416087286957438633_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi45NjB4NzIwLnNkci5mMzA4MDguZGVmYXVsdF9pbWFnZSJ9&_nc_ht=scontent-iev1-1.cdninstagram.com&_nc_cat=104&_nc_ohc=5McbxMeQ3nQQ7kNvgGrsCsW&_nc_gid=e8ece8321ef94d8aa0e3428cfb7652c7&edm=APoiHPcAAAAA&ccb=7-5&ig_cache_key=MzM0Njc4ODc4MzM3MzEyNjM0Ng%3D%3D.3-ccb7-5&oh=00_AYAas1N9SjceVZFXGIPa5k3IGtjB-BXW7f6_3bO8vFengg&oe=66F99C40&_nc_sid=22de04',
       portfolio2,
       title: 'Cloud App',
     },
     {
       imageSrc:
       portfolio3,
-        // 'https://scontent-iev1-1.cdninstagram.com/v/t39.30808-6/455102318_18053294554843204_1124002863244481315_n.jpg?stp=dst-jpg_e35&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xMjAweDE1MDAuc2RyLmYzMDgwOC5kZWZhdWx0X2ltYWdlIn0&_nc_ht=scontent-iev1-1.cdninstagram.com&_nc_cat=104&_nc_ohc=dgLjQ4d3buYQ7kNvgHMunat&_nc_gid=771d7f07c9654481a25a7af1a2619661&edm=APoiHPcAAAAA&ccb=7-5&ig_cache_key=MzQzMzAyNzkwMzc3ODM1NTgzNg%3D%3D.3-ccb7-5&oh=00_AYC4ZuphHfPqTN4sOz3XTUu__02Wg6hthVegJ7Z262Orng&oe=66F9B087&_nc_sid=22de04',
       title: 'Design Byte App',
     },
   ];

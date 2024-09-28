@@ -6,27 +6,23 @@ export async function uploadFiles() {
         return;
     }
 
-    // Read the file content
     const reader = new FileReader();
     reader.onload = async function (event) {
-        const content = event.target.result.split(',')[1]; // Get the base64 string
+        const content = event.target.result.split(',')[1];
 
-        // GitHub API details
-        const owner = 'yamchinsky'; // Replace with your GitHub username
-        const repo = 'legenda-podillia-storage';  // Replace with your repository name
-        const path = `uploads/${file.name}`;  // Path inside the repo
-        const token = '';  // Replace with your GitHub token
+        const owner = 'yamchinsky';
+        const repo = 'legenda-podillia-storage';
+        const path = `uploads/${file.name}`;
+        const token = '';
 
         const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
 
-        // Create the request payload
         const data = {
             message: `Upload ${file.name}`,
             content: content,
-            branch: 'main' // Replace with the branch you want to upload to
+            branch: 'main'
         };
 
-        // Make the request to GitHub API
         try {
             const response = await fetch(url, {
                 method: 'PUT',
@@ -50,6 +46,5 @@ export async function uploadFiles() {
         }
     };
 
-    // Read the file as a Data URL (base64)
     reader.readAsDataURL(file);
 }
