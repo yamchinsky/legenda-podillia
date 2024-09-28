@@ -9,7 +9,7 @@ export const Hero = () => {
   };
 
   return (
-    <section id="home" className="flex flex-col items-center mt-14 lg:mt-20 px-6 lg:px-20">
+    <section id="home" className="flex flex-col items-center mt-[200px] px-6 lg:px-20">
       <h1 className="text-3xl lg:text-6xl font-extrabold text-center text-stone-900">
         Робимо все можливе <br /> для допомоги ЗСУ
       </h1>

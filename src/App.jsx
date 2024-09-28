@@ -46,11 +46,24 @@ export const App = () => {
 
 const MainContent = () => (
   <>
-    <Hero />
-    <AboutUs />
-    <Services />
-    <Portfolio />
-    <Testimonials />
-    <CallToAction />
+    <section id="home">
+      <Hero />
+    </section>
+    <section id="about">
+      <AboutUs />
+    </section>
+    <section id="services">
+      <Services />
+    </section>
+    <section id="portfolio">
+      <Portfolio />
+    </section>
+    <section id="testimonials">
+      <Testimonials />
+    </section>
+    <section id="callToAction">
+      <CallToAction />
+    </section>
   </>
 );
+

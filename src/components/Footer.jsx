@@ -1,12 +1,15 @@
 import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaWhatsapp } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import { handleNavigation } from '../utils/handleNavigation';
 
 import logo from '../assets/logo.jpg';
 
 export const Footer = () => {
+  const navigate = useNavigate();
   return (
     <footer className="flex flex-col items-center justify-center px-7 lg:px-20 py-14 lg:py-32 mt-24 lg:mt-44 bg-neutral-700 text-white">
       <div className="mb-6 lg:mb-12">
-          <div className="flex items-center gap-3 px-7 py-5 bg-white rounded-3xl text-stone-900">
+          <div className="flex items-center gap-3 px-7 py-5 bg-white rounded-3xl text-stone-900" onClick={() => handleNavigation(navigate, 'home')}>
             <img src={logo} alt="Agency logo" className="w-[70px]" />
             <div>
               <div className="text-xl font-bold">Легенда</div>

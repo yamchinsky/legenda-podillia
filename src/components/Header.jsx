@@ -1,10 +1,16 @@
 import { Navigation } from './Navigation';
 import logo from '../assets/logo.jpg';
+import { useNavigate } from 'react-router-dom';
+import { handleNavigation } from '../utils/handleNavigation';
 
 export const Header = () => {
+  const navigate = useNavigate();
   return (
-    <header className="flex flex-col lg:flex-row justify-between items-center p-4 lg:p-10 text-stone-900 bg-white w-full">
-      <div className="flex items-center gap-2 mb-4 lg:mb-0">
+    <header
+      className="fixed top-0 z-50 flex flex-col lg:flex-row justify-between items-center p-4 lg:p-10 text-stone-900 bg-white w-full shadow-md"
+      style={{ position: 'fixed', top: 0, backgroundColor: 'white', zIndex: 1000 }}
+    >
+      <div className="flex items-center gap-2 mb-4 lg:mb-0 cursor-pointer" onClick={() => handleNavigation(navigate, 'home')}>
         <img src={logo} alt="Agency logo" className="w-20 lg:w-24" />
         <div>
           <div className="text-lg lg:text-xl font-bold">Легенда</div>

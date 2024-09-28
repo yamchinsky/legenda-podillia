@@ -39,7 +39,7 @@ export const Reports = () => {
   }, []);
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen flex flex-col items-center">
+    <div className="p-6 bg-gray-100 min-h-screen flex flex-col items-center mt-[170px]">
       <h1 className="text-3xl font-bold mb-4">Reports Page</h1>
       <Spin spinning={loading}>
         <Row gutter={[16, 16]} justify="center" style={{ justifyContent: 'center' }}>
