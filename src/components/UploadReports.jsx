@@ -26,47 +26,47 @@ export const UploadReports = ({ token }) => {
   const [editingFile, setEditingFile] = useState(null);
   const [newFileName, setNewFileName] = useState("");
 
+  const fetchFiles = async () => {
+    const owner = import.meta.env.VITE_GITHUB_OWNER;
+    const repo = import.meta.env.VITE_GITHUB_REPO;
+    const path = import.meta.env.VITE_GITHUB_REPO_PATH;
+    const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+
+    try {
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `token ${token}`,
+          Accept: "application/vnd.github.v3+json",
+        },
+      });
+
+      const filesWithDates = await Promise.all(
+        response.data.map(async (file) => {
+          const commitsUrl = `https://api.github.com/repos/${owner}/${repo}/commits?path=${file.path}&per_page=1`;
+          try {
+            const commitsResponse = await axios.get(commitsUrl, {
+              headers: {
+                Authorization: `token ${token}`,
+                Accept: "application/vnd.github.v3+json",
+              },
+            });
+            const lastModified =
+              commitsResponse.data[0]?.commit.author.date || "Unknown";
+            return { ...file, lastModified };
+          } catch {
+            return { ...file, lastModified: "Unknown" };
+          }
+        })
+      );
+
+      setFileList(filesWithDates);
+    } catch (error) {
+      console.error("Error fetching files:", error);
+      message.error("Failed to fetch files from GitHub.");
+    }
+  };
+
   useEffect(() => {
-    const fetchFiles = async () => {
-      const owner = import.meta.env.VITE_GITHUB_OWNER;
-      const repo = import.meta.env.VITE_GITHUB_REPO;
-      const path = import.meta.env.VITE_GITHUB_REPO_PATH;
-      const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-
-      try {
-        const response = await axios.get(url, {
-          headers: {
-            Authorization: `token ${token}`,
-            Accept: "application/vnd.github.v3+json",
-          },
-        });
-
-        const filesWithDates = await Promise.all(
-          response.data.map(async (file) => {
-            const commitsUrl = `https://api.github.com/repos/${owner}/${repo}/commits?path=${file.path}&per_page=1`;
-            try {
-              const commitsResponse = await axios.get(commitsUrl, {
-                headers: {
-                  Authorization: `token ${token}`,
-                  Accept: "application/vnd.github.v3+json",
-                },
-              });
-              const lastModified =
-                commitsResponse.data[0]?.commit.author.date || "Unknown";
-              return { ...file, lastModified };
-            } catch {
-              return { ...file, lastModified: "Unknown" };
-            }
-          })
-        );
-
-        setFileList(filesWithDates);
-      } catch (error) {
-        console.error("Error fetching files:", error);
-        message.error("Failed to fetch files from GitHub.");
-      }
-    };
-
     fetchFiles();
   }, [token]);
 
@@ -79,15 +79,12 @@ export const UploadReports = ({ token }) => {
     setIsUploading(true);
 
     const uniqueFiles = new Map();
-
     newFileList.forEach((file) => {
       const fileKey = `${file.name}-${file.size}`;
       if (!uniqueFiles.has(fileKey)) {
         uniqueFiles.set(fileKey, file.originFileObj);
       }
     });
-
-    setFileList([...uniqueFiles.values()]);
 
     const owner = import.meta.env.VITE_GITHUB_OWNER;
     const repo = import.meta.env.VITE_GITHUB_REPO;
@@ -126,6 +123,7 @@ export const UploadReports = ({ token }) => {
           );
 
           message.success(`File ${file.name} uploaded successfully.`);
+          await fetchFiles();
         } catch (uploadError) {
           console.error("Error uploading file:", uploadError);
           message.error(`Failed to upload ${file.name} to GitHub.`);
@@ -154,13 +152,14 @@ export const UploadReports = ({ token }) => {
       });
 
       const sha = getFileResponse.data.sha;
+      const content = getFileResponse.data.content;
 
       await axios.put(
         `https://api.github.com/repos/${owner}/${repo}/contents/${newPath}`,
         {
           message: `Renamed ${file.name} to ${newFileName}`,
+          content,
           sha,
-          content: getFileResponse.data.content,
         },
         {
           headers: {
@@ -171,15 +170,9 @@ export const UploadReports = ({ token }) => {
       );
 
       message.success(`File renamed successfully.`);
-      setFileList((prev) =>
-        prev.map((f) =>
-          f.sha === file.sha
-            ? { ...f, name: newFileName, path: newPath, sha }
-            : f
-        )
-      );
       setEditingFile(null);
       setNewFileName("");
+      await fetchFiles();
     } catch (error) {
       console.error("Error renaming file:", error);
       message.error("Failed to rename the file.");
@@ -211,7 +204,7 @@ export const UploadReports = ({ token }) => {
       });
 
       message.success(`File ${file.name} deleted successfully.`);
-      setFileList((prev) => prev.filter((f) => f.sha !== sha));
+      await fetchFiles();
     } catch (error) {
       console.error("Error deleting file:", error);
       if (error.response?.status === 422) {
@@ -259,7 +252,7 @@ export const UploadReports = ({ token }) => {
         multiple
         accept=".xls,.xlsx,.txt,.doc,.docx,.jpg,.jpeg,.png,.svg,.img"
         fileList={fileList.map((file) => ({
-          uid: file.sha,
+          uid: `${file.sha}-${Math.random()}`,
           name: file.name,
           status: "done",
         }))}
@@ -274,10 +267,17 @@ export const UploadReports = ({ token }) => {
 
       <Row
         gutter={[16, 16]}
-        style={{ marginTop: 20, justifyContent: "center" }}
+        style={{ marginTop: 20, justifyContent: "center", width: "100%" }}
+        align="top"
       >
         {fileList.map((file) => (
-          <Col key={file.sha} xs={16} sm={12} md={8} lg={6}>
+          <Col
+            key={`${file.sha}-${Math.random()}`}
+            xs={16}
+            sm={12}
+            md={8}
+            lg={6}
+          >
             <Card
               title={
                 <Text
