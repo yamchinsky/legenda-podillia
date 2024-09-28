@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Modal, Input, Button, message } from 'antd';
-import axios from 'axios';
+import { useState } from "react";
+import { Modal, Input, Button, message } from "antd";
+import axios from "axios";
 
 export const AuthForm = ({ setToken }) => {
-  const [inputToken, setInputToken] = useState('');
-  const [error, setError] = useState('');
+  const [inputToken, setInputToken] = useState("");
+  const [error, setError] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(true);
 
   const handleTokenValidation = async (e) => {
@@ -22,16 +22,18 @@ export const AuthForm = ({ setToken }) => {
       });
 
       if (!response.data.permissions.push) {
-        throw new Error('Token does not have write access.');
+        throw new Error("Token does not have write access.");
       }
 
       setToken(inputToken);
-      setError('');
-      message.success('Token validated successfully! Access granted.');
+      setError("");
+      message.success("Token validated successfully! Access granted.");
       setIsModalOpen(false);
     } catch (error) {
-      setError('Invalid token or insufficient permissions. Please enter a valid private GitHub token with write access.');
-      console.error('Invalid GitHub token:', error);
+      setError(
+        "Invalid token or insufficient permissions. Please enter a valid private GitHub token with write access."
+      );
+      console.error("Invalid GitHub token:", error);
     }
   };
 
@@ -42,7 +44,10 @@ export const AuthForm = ({ setToken }) => {
       onCancel={() => setIsModalOpen(false)}
       footer={null}
     >
-      <form onSubmit={handleTokenValidation} className="flex flex-col items-center gap-4">
+      <form
+        onSubmit={handleTokenValidation}
+        className="flex flex-col items-center gap-4"
+      >
         <Input
           type="password"
           placeholder="Enter GitHub private token"
@@ -50,11 +55,7 @@ export const AuthForm = ({ setToken }) => {
           onChange={(e) => setInputToken(e.target.value)}
           className="px-4 py-2 border border-gray-400 rounded"
         />
-        <Button
-          type="primary"
-          htmlType="submit"
-          className="font-semibold"
-        >
+        <Button type="primary" htmlType="submit" className="font-semibold">
           Submit
         </Button>
         {error && <p className="text-red-500">{error}</p>}

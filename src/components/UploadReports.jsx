@@ -1,7 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { Upload, Button, Card, Row, Col, Input, Modal, Typography, Space, message } from 'antd';
-import { UploadOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import axios from 'axios';
+import { useEffect, useState } from "react";
+import {
+  Upload,
+  Button,
+  Card,
+  Row,
+  Col,
+  Input,
+  Modal,
+  Typography,
+  Space,
+  message,
+} from "antd";
+import {
+  UploadOutlined,
+  EditOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
+import axios from "axios";
 
 const { Text } = Typography;
 
@@ -9,7 +24,7 @@ export const UploadReports = ({ token }) => {
   const [fileList, setFileList] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [editingFile, setEditingFile] = useState(null);
-  const [newFileName, setNewFileName] = useState('');
+  const [newFileName, setNewFileName] = useState("");
 
   useEffect(() => {
     const fetchFiles = async () => {
@@ -22,7 +37,7 @@ export const UploadReports = ({ token }) => {
         const response = await axios.get(url, {
           headers: {
             Authorization: `token ${token}`,
-            Accept: 'application/vnd.github.v3+json',
+            Accept: "application/vnd.github.v3+json",
           },
         });
 
@@ -33,21 +48,22 @@ export const UploadReports = ({ token }) => {
               const commitsResponse = await axios.get(commitsUrl, {
                 headers: {
                   Authorization: `token ${token}`,
-                  Accept: 'application/vnd.github.v3+json',
+                  Accept: "application/vnd.github.v3+json",
                 },
               });
-              const lastModified = commitsResponse.data[0]?.commit.author.date || 'Unknown';
+              const lastModified =
+                commitsResponse.data[0]?.commit.author.date || "Unknown";
               return { ...file, lastModified };
             } catch {
-              return { ...file, lastModified: 'Unknown' };
+              return { ...file, lastModified: "Unknown" };
             }
           })
         );
 
         setFileList(filesWithDates);
       } catch (error) {
-        console.error('Error fetching files:', error);
-        message.error('Failed to fetch files from GitHub.');
+        console.error("Error fetching files:", error);
+        message.error("Failed to fetch files from GitHub.");
       }
     };
 
@@ -55,7 +71,7 @@ export const UploadReports = ({ token }) => {
   }, [token]);
 
   const customRequest = ({ onSuccess }) => {
-    onSuccess('ok');
+    onSuccess("ok");
   };
 
   const handleFileUpload = async ({ fileList: newFileList }) => {
@@ -79,7 +95,7 @@ export const UploadReports = ({ token }) => {
 
     for (const file of uniqueFiles.values()) {
       if (!(file instanceof Blob)) {
-        console.error('Invalid file type passed to FileReader:', file);
+        console.error("Invalid file type passed to FileReader:", file);
         continue;
       }
 
@@ -98,20 +114,20 @@ export const UploadReports = ({ token }) => {
               content,
               committer: {
                 name: owner,
-                email: 'y.p.p@i.ua',
+                email: "y.p.p@i.ua",
               },
             },
             {
               headers: {
                 Authorization: `token ${token}`,
-                Accept: 'application/vnd.github.v3+json',
+                Accept: "application/vnd.github.v3+json",
               },
             }
           );
 
           message.success(`File ${file.name} uploaded successfully.`);
         } catch (uploadError) {
-          console.error('Error uploading file:', uploadError);
+          console.error("Error uploading file:", uploadError);
           message.error(`Failed to upload ${file.name} to GitHub.`);
         } finally {
           setIsUploading(false);
@@ -133,7 +149,7 @@ export const UploadReports = ({ token }) => {
       const getFileResponse = await axios.get(url, {
         headers: {
           Authorization: `token ${token}`,
-          Accept: 'application/vnd.github.v3+json',
+          Accept: "application/vnd.github.v3+json",
         },
       });
 
@@ -149,7 +165,7 @@ export const UploadReports = ({ token }) => {
         {
           headers: {
             Authorization: `token ${token}`,
-            Accept: 'application/vnd.github.v3+json',
+            Accept: "application/vnd.github.v3+json",
           },
         }
       );
@@ -157,49 +173,55 @@ export const UploadReports = ({ token }) => {
       message.success(`File renamed successfully.`);
       setFileList((prev) =>
         prev.map((f) =>
-          f.sha === file.sha ? { ...f, name: newFileName, path: newPath, sha } : f
+          f.sha === file.sha
+            ? { ...f, name: newFileName, path: newPath, sha }
+            : f
         )
       );
       setEditingFile(null);
-      setNewFileName('');
+      setNewFileName("");
     } catch (error) {
-      console.error('Error renaming file:', error);
-      message.error('Failed to rename the file.');
+      console.error("Error renaming file:", error);
+      message.error("Failed to rename the file.");
     }
   };
 
   const handleDelete = async (file) => {
     const fileMetadata = await fetchFileMetadata(file);
     if (!fileMetadata || !fileMetadata.sha) {
-      message.error('Unable to retrieve the file information for deletion.');
+      message.error("Unable to retrieve the file information for deletion.");
       return;
     }
-  
+
     const { sha } = fileMetadata;
     const owner = import.meta.env.VITE_GITHUB_OWNER;
     const repo = import.meta.env.VITE_GITHUB_REPO;
     const url = `https://api.github.com/repos/${owner}/${repo}/contents/${file.path}`;
-  
+
     try {
       await axios.delete(url, {
         headers: {
           Authorization: `token ${token}`,
-          Accept: 'application/vnd.github.v3+json',
+          Accept: "application/vnd.github.v3+json",
         },
         data: {
           message: `Deleted ${file.name}`,
           sha,
         },
       });
-  
+
       message.success(`File ${file.name} deleted successfully.`);
       setFileList((prev) => prev.filter((f) => f.sha !== sha));
     } catch (error) {
-      console.error('Error deleting file:', error);
+      console.error("Error deleting file:", error);
       if (error.response?.status === 422) {
-        message.error('Failed to delete the file. The file might have been modified or deleted already.');
+        message.error(
+          "Failed to delete the file. The file might have been modified or deleted already."
+        );
       } else {
-        message.error('Failed to delete the file. Please check if the file exists and has the correct permissions.');
+        message.error(
+          "Failed to delete the file. Please check if the file exists and has the correct permissions."
+        );
       }
     }
   };
@@ -208,27 +230,27 @@ export const UploadReports = ({ token }) => {
     const owner = import.meta.env.VITE_GITHUB_OWNER;
     const repo = import.meta.env.VITE_GITHUB_REPO;
     const url = `https://api.github.com/repos/${owner}/${repo}/contents/${file.path}`;
-  
+
     try {
       const response = await axios.get(url, {
         headers: {
           Authorization: `token ${token}`,
-          Accept: 'application/vnd.github.v3+json',
+          Accept: "application/vnd.github.v3+json",
         },
       });
-  
+
       if (!response.data.sha) {
-        console.error('Unexpected response format:', response.data);
-        message.error('Failed to retrieve the correct file metadata.');
+        console.error("Unexpected response format:", response.data);
+        message.error("Failed to retrieve the correct file metadata.");
         return null;
       }
       return response.data;
     } catch (error) {
-      console.error('Error fetching file metadata:', error);
-      message.error('Failed to fetch file metadata.');
+      console.error("Error fetching file metadata:", error);
+      message.error("Failed to fetch file metadata.");
       return null;
     }
-  };  
+  };
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen mt-[170px] flex flex-col items-center">
@@ -239,7 +261,7 @@ export const UploadReports = ({ token }) => {
         fileList={fileList.map((file) => ({
           uid: file.sha,
           name: file.name,
-          status: 'done',
+          status: "done",
         }))}
         onChange={handleFileUpload}
         customRequest={customRequest}
@@ -250,12 +272,18 @@ export const UploadReports = ({ token }) => {
         </Button>
       </Upload>
 
-      <Row gutter={[16, 16]} style={{ marginTop: 20, justifyContent: 'center' }}>
+      <Row
+        gutter={[16, 16]}
+        style={{ marginTop: 20, justifyContent: "center" }}
+      >
         {fileList.map((file) => (
           <Col key={file.sha} xs={16} sm={12} md={8} lg={6}>
             <Card
               title={
-                <Text ellipsis={{ tooltip: file.name }} style={{ maxWidth: '100%' }}>
+                <Text
+                  ellipsis={{ tooltip: file.name }}
+                  style={{ maxWidth: "100%" }}
+                >
                   {file.name}
                 </Text>
               }
@@ -270,7 +298,7 @@ export const UploadReports = ({ token }) => {
                 <DeleteOutlined
                   key="delete"
                   onClick={() => handleDelete(file)}
-                  style={{ color: 'red' }}
+                  style={{ color: "red" }}
                 />,
               ]}
             >
@@ -278,7 +306,10 @@ export const UploadReports = ({ token }) => {
                 <Text type="secondary">
                   Last modified: {new Date(file.lastModified).toLocaleString()}
                 </Text>
-                <Button type="primary" onClick={() => window.open(file.download_url, '_blank')}>
+                <Button
+                  type="primary"
+                  onClick={() => window.open(file.download_url, "_blank")}
+                >
                   View File
                 </Button>
               </Space>

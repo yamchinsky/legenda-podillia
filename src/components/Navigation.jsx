@@ -1,13 +1,12 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { handleNavigation } from '../utils/handleNavigation';
+import { useNavigate } from "react-router-dom";
+import { handleNavigation } from "../utils/handleNavigation";
 
 export const Navigation = () => {
   const navigate = useNavigate();
   const navItems = [
-    { name: 'Головна', href: 'home' },
-    { name: 'Про нас', href: 'about' },
-    { name: 'Зв\'язатися з нами', href: 'contact' },
+    { name: "Головна", href: "home" },
+    { name: "Про нас", href: "about" },
+    { name: "Зв'язатися з нами", href: "contact" },
   ];
 
   return (
@@ -17,9 +16,9 @@ export const Navigation = () => {
           key={index}
           onClick={() => handleNavigation(navigate, item.href)}
           className={`hover:text-blue-500 transition-colors ${
-            index === 0 ? 'font-bold text-blue-500' : 'text-stone-900'
+            index === 0 ? "font-bold text-blue-500" : "text-stone-900"
           }`}
-          style={{ border: 'none', background: 'none', cursor: 'pointer' }}
+          style={{ border: "none", background: "none", cursor: "pointer" }}
         >
           {item.name}
         </button>
