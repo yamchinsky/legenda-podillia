@@ -80,7 +80,7 @@ export const Footer = () => {
             <FaFacebook size={30} />
           </a>
           <a
-            href="https://www.instagram.com"
+            href="https://www.instagram.com/legendapodillia/"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-pink-500"
