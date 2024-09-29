@@ -37,9 +37,9 @@ jobs:
         env:
           VITE_GITHUB_OWNER: ${{ secrets.VITE_GITHUB_OWNER }}
           VITE_GITHUB_REPO: ${{ secrets.VITE_GITHUB_REP }}
-          VITE_GITHUB_REPO_PATH: ${{ VITE_GITHUB_REPO_PATH }}
-          VITE_GITHUB_TOKEN_PUBLIC: ${{ VITE_GITHUB_TOKEN_PUBLIC }}
-          VITE_GITHUB_TOKEN_PRIVATE: ${{ VITE_GITHUB_TOKEN_PRIVATE }}
+          VITE_GITHUB_REPO_PATH: ${{ secrets.VITE_GITHUB_REPO_PATH }}
+          VITE_GITHUB_TOKEN_PUBLIC: ${{ secrets.VITE_GITHUB_TOKEN_PUBLIC }}
+          VITE_GITHUB_TOKEN_PRIVATE: ${{ secrets.VITE_GITHUB_TOKEN_PRIVATE }}
 
       - name: Create CNAME file for custom domain
         run: echo "legenda-poddillia.biz.ua" > ./dist/CNAME
