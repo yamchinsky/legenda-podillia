@@ -30,11 +30,17 @@ export const Header = () => {
         <Navigation />
       </div>
 
-      <button className="mt-4 lg:mt-0 px-5 py-2.5 text-base font-bold text-blue-500 border border-blue-500 rounded-3xl hover:bg-blue-500 hover:text-white transition hidden lg:flex">
+      <button
+        onClick={() => navigate("/donate")}
+        className="mt-4 lg:mt-0 px-5 py-2.5 text-base font-bold text-blue-500 border border-blue-500 rounded-3xl hover:bg-blue-500 hover:text-white transition hidden lg:flex"
+      >
         Задонатити
       </button>
 
-      <button className="flex lg:hidden px-4 py-2 text-sm font-bold text-blue-500 border border-blue-500 rounded-3xl hover:bg-blue-500 hover:text-white transition">
+      <button
+        onClick={() => navigate("/donate")}
+        className="flex lg:hidden px-4 py-2 text-sm font-bold text-blue-500 border border-blue-500 rounded-3xl hover:bg-blue-500 hover:text-white transition"
+      >
         Задонатити
       </button>
     </header>

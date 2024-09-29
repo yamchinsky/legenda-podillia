@@ -1,6 +1,8 @@
 import contactUsImg from "../assets/images/contactUs.jpg";
+import { useNavigate } from "react-router-dom";
 
 export const CallToAction = () => {
+  const navigate = useNavigate();
   return (
     <section
       id="contact"
@@ -15,7 +17,10 @@ export const CallToAction = () => {
             Бажаєте разом із нами допомогати ЗСУ та людям, які потребують
             підтримки в місцях окупації?
           </p>
-          <button className="px-9 lg:px-12 py-2.5 lg:py-3 mt-6 text-xs lg:text-base font-bold text-white bg-blue-500 rounded-3xl shadow">
+          <button
+            onClick={() => navigate("/donate")}
+            className="px-9 lg:px-12 py-2.5 lg:py-3 mt-6 text-xs lg:text-base font-bold text-white bg-blue-500 rounded-3xl shadow"
+          >
             Задонатити
           </button>
         </div>

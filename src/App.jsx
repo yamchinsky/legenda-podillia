@@ -11,8 +11,9 @@ import { Reports } from "./components/Reports";
 import { ReportsItem } from "./components/ReportsItem";
 import { UploadReports } from "./components/UploadReports";
 import { AuthForm } from "./components/AuthForm";
-import { Footer } from "./components/Footer";
 import { NotFound } from "./components/NotFound";
+import { Donation } from "./components/Donation";
+import { Footer } from "./components/Footer";
 
 import "./App.css";
 
@@ -38,6 +39,7 @@ export const App = () => {
         <div className="flex-grow">
           <Routes>
             <Route path="/" element={<MainContent />} />
+            <Route path="/donate" element={<Donation />} />
             <Route path="/reports" element={<Reports />} />
             <Route path="/reports/:id" element={<ReportsItem />} />
             <Route
