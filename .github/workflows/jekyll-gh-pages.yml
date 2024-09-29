@@ -20,20 +20,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      
+
       - name: Clear npm cache
         run: npm cache clean --force
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: "20"
 
       - name: Install dependencies
         run: npm install
 
       - name: Build with Vite
         run: npm run build
+
+      - name: Create CNAME file for custom domain
+        run: echo "legenda-poddillia.biz.ua" > ./dist/CNAME
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
