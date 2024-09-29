@@ -12,6 +12,7 @@ import { ReportsItem } from "./components/ReportsItem";
 import { UploadReports } from "./components/UploadReports";
 import { AuthForm } from "./components/AuthForm";
 import { Footer } from "./components/Footer";
+import { NotFound } from "./components/NotFound";
 
 import "./App.css";
 
@@ -34,15 +35,18 @@ export const App = () => {
     >
       <div className="flex flex-col min-h-screen overflow-hidden pt-2 bg-white">
         <Header />
-        <Routes>
-          <Route path="/" element={<MainContent />} />
-          <Route path="/reports" element={<Reports />} />
-          <Route path="/reports/:id" element={<ReportsItem />} />
-          <Route
-            path="/upload/reports"
-            element={renderProtectedRoute(UploadReports)}
-          />
-        </Routes>
+        <div className="flex-grow">
+          <Routes>
+            <Route path="/" element={<MainContent />} />
+            <Route path="/reports" element={<Reports />} />
+            <Route path="/reports/:id" element={<ReportsItem />} />
+            <Route
+              path="/upload/reports"
+              element={renderProtectedRoute(UploadReports)}
+            />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
         <Footer />
       </div>
     </Router>
