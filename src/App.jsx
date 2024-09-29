@@ -29,11 +29,7 @@ export const App = () => {
   };
 
   return (
-    <Router
-      basename={
-        import.meta.env.MODE === "production" ? "/legenda-podillia" : "/"
-      }
-    >
+    <Router basename="/">
       <div className="flex flex-col min-h-screen overflow-hidden pt-2 bg-white">
         <Header />
         <div className="flex-grow">
