@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Button, message } from "antd";
 
 export const Donation = () => {
@@ -12,8 +13,12 @@ export const Donation = () => {
     });
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
-    <div className="p-6 bg-gray-100 min-h-screen flex flex-col items-center justify-center">
+    <div className="px-6 pt-6 bg-gray-100 min-h-screen flex flex-col items-center mt-[170px]">
       <h1 className="text-3xl font-bold mb-8">Зробіть свій внесок</h1>
 
       <div className="mb-8 w-full max-w-md bg-white shadow p-6 rounded-lg text-center">

@@ -6,7 +6,7 @@ export const CallToAction = () => {
   return (
     <section
       id="contact"
-      className="flex flex-col items-center mt-24 lg:mt-60 px-6 lg:px-20"
+      className="flex flex-col items-center mt-24 mb-4 lg:mt-60 lg:mb-10 px-6 lg:px-20"
     >
       <div className="flex flex-col lg:flex-row items-start lg:justify-between w-full">
         <div className="lg:w-1/2">
