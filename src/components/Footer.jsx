@@ -32,18 +32,18 @@ export const Footer = () => {
             <h3 className="text-2xl font-bold">
               ГО &quot;ЛЕГЕНДА ПОДІЛЛЯ&quot;
             </h3>
-            <ul className="mt-4 space-y-2">
-              <li>
-                <a href="#home" className="hover:underline">
+            <ul className="mt-4 space-y-2 text-center lg:text-start">
+              <li onClick={() => handleNavigation(navigate, "home")}>
+                <a className="hover:underline">
                   Головна
                 </a>
               </li>
-              <li>
+              <li onClick={() => handleNavigation(navigate, "about")}>
                 <a href="#about" className="hover:underline">
                   Про нас
                 </a>
               </li>
-              <li>
+              <li onClick={() => handleNavigation(navigate, "contact")}>
                 <a href="#contact" className="hover:underline">
                   Зв&apos;язатися з нами
                 </a>
