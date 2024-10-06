@@ -61,7 +61,13 @@ export const Reports = () => {
                     }}
                   />
                 }
-                onClick={() => window.open(`/reports/${file.name}`, "_blank")}
+                onClick={() => {
+                  const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+                  const fileUrl = isLocal 
+                    ? `/reports/${file.name}` 
+                    : `https://raw.githubusercontent.com/${owner}/${repo}/main/${path}/${file.name}`;
+                  window.open(fileUrl, "_blank");
+                }}
               >
                 <Text
                   ellipsis={{ tooltip: file.name }}

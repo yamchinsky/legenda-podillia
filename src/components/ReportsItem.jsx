@@ -40,7 +40,11 @@ export const ReportsItem = () => {
       const path = import.meta.env.VITE_GITHUB_REPO_PATH;
       const token = import.meta.env.VITE_GITHUB_TOKEN_PUBLIC;
 
-      const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}/${id}`;
+      const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+      const url = isLocal 
+      ? `https://api.github.com/repos/${owner}/${repo}/contents/${path}/${id}` 
+      : `https://raw.githubusercontent.com/${owner}/${repo}/main/${path}/${id}`;
+
       setLoading(true);
       try {
         const response = await axios.get(url, {
