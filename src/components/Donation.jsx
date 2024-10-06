@@ -4,10 +4,12 @@ import { Button, message } from "antd";
 export const Donation = () => {
   const handleCopy = () => {
     const requisites = `
-        IBAN: UA253052990000026006046002285
-        ЄДРПОУ: 41245853
-        Банк: АТ КБ "ПРИВАТБАНК"
-        `;
+      ЄДРПОУ 41245853
+      UA253052990000026006046002285 (грн)
+      UA583052990000026005036017515 (euro)
+      JSC CB "PRIVATBANK", 1D HRUSHEVSKOHO STR., KYIV, 01001, UKRAINE
+      Bank SWIFT Code: PBANUA2X
+      `;
     navigator.clipboard.writeText(requisites).then(() => {
       message.success("Реквізити скопійовані!");
     });
@@ -26,11 +28,13 @@ export const Donation = () => {
           Спасіння ЖИТТЯ військових - ПРОЗОРО
         </h2>
         <p className="mb-4">
-          <strong>IBAN:</strong> UA253052990000026006046002285 <br />
+          <strong>IBAN:</strong> UA253052990000026006046002285 (грн)<br />
+          <strong>IBAN:</strong> UA583052990000026005036017515 (euro)<br />
           <strong>ЄДРПОУ:</strong> 41245853 <br />
-          <strong>Банк:</strong> АТ КБ &quot;ПРИВАТБАНК&quot;
+          <strong>Банк:</strong> JSC CB "PRIVATBANK", 1D HRUSHEVSKOHO STR., KYIV, 01001, UKRAINE<br />
+          <strong>Bank SWIFT Code:</strong> PBANUA2X;
         </p>
-        <Button onClick={() => handleCopy("UA253052990000026006046002285")}>
+        <Button onClick={() => handleCopy()}>
           Скопіювати реквізити
         </Button>
       </div>

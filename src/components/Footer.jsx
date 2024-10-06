@@ -50,29 +50,34 @@ export const Footer = () => {
               </li>
             </ul>
           </nav>
-          <div className="flex flex-col items-center lg:items-start text-xl font-light">
+          <div className="flex flex-col items-center text-center lg:items-start lg:text-start text-xl font-light">
             <h3 className="text-2xl font-bold">КОНТАКТИ</h3>
-            <p className="mt-4">(+38) (097) 080-47-95</p>
-            <p>legenda@i.ua</p>
+            <p className="mt-4">(+38) (097) 080-47-95 - Вікторія Кшемінська</p>
+            <p className="mt-4">(+38) (098) 994-11-24 - Альбіна Гуменюк</p>
+            <p className="mt-4">legendapodillia@gmail.com</p>
           </div>
           <div className="flex flex-col items-center lg:items-start text-xl font-light">
             <address className="text-center lg:text-left not-italic">
               <h3 className="text-2xl font-bold">АДРЕСА</h3>
               <p className="mt-4">
-                32300, ХМЕЛЬНИЦЬКА область,
+              офіс: Кн.Коріатовичів 5, 
+              <br /> 
+              м.Кам’янець-Подільський, 
+              </p>
+              <p className="mt-2">
+                юридична адреса:
+                32325, ХМЕЛЬНИЦЬКА область,
                 <br />
-                КАМ&apos;ЯНЕЦЬ-ПОДІЛЬСЬКИЙ район, село ГУМЕНЦІ,
+                КАМ&apos;ЯНЕЦЬ-ПОДІЛЬСЬКИЙ район, село Гуменці,
                 <br />
                 вулиця ПЕРШОТРАВНЕВА, будинок 20-А
-                <br />
-                legenda@i.ua
               </p>
             </address>
           </div>
         </div>
         <div className="flex gap-5 mt-10 justify-center">
           <a
-            href="https://www.facebook.com"
+            href="https://www.facebook.com/profile.php?id=61556114894580"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-blue-500"
@@ -80,7 +85,7 @@ export const Footer = () => {
             <FaFacebook size={30} />
           </a>
           <a
-            href="https://www.instagram.com/legendapodillia/"
+            href="https://www.instagram.com/volonterylegendapodillia"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-pink-500"
