@@ -15,6 +15,9 @@ import { NotFound } from "./components/NotFound";
 import { Donation } from "./components/Donation";
 import { Footer } from "./components/Footer";
 
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 import "./App.css";
 
 export const App = () => {

@@ -1,6 +1,12 @@
+import Slider from "react-slick";
+
 import portfolio1 from "../assets/images/portfolio/porfolio1.jpg";
 import portfolio2 from "../assets/images/portfolio/porfolio2.jpg";
 import portfolio3 from "../assets/images/portfolio/porfolio3.jpg";
+import portfolio4 from "../assets/images/portfolio/porfolio3.jpg";
+import portfolio5 from "../assets/images/portfolio/porfolio3.jpg";
+
+import "./portfolio.scss";
 
 export const Portfolio = () => {
   const portfolioItems = [
@@ -16,38 +22,67 @@ export const Portfolio = () => {
       imageSrc: portfolio3,
       title: "Design Byte App",
     },
+    {
+      imageSrc: portfolio4,
+      title: "Design 4",
+    },
+    {
+      imageSrc: portfolio5,
+      title: "Design 5",
+    },
   ];
 
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: Math.min(5, portfolioItems.length),
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: Math.min(2, portfolioItems.length),
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+    appendDots: (dots) => (
+      <div className="slick-dots-container">
+        <ul>{dots}</ul>
+      </div>
+    ),
+    customPaging: (i) => <div className="custom-dot" />,
+  };
+
   return (
-    <section className="flex flex-col items-center mt-20 lg:mt-32 px-6 lg:px-20">
-      <h2 className="text-sm lg:text-2xl font-semibold text-blue-500">
-        Фото звітність
-      </h2>
-      <h3 className="mt-2.5 lg:mt-5 text-2xl lg:text-6xl font-bold text-stone-900">
-        Що ми робимо
-      </h3>
-      <p className="mt-9 lg:mt-6 text-sm lg:text-xl text-center text-zinc-700">
+    <section className="portfolio-section">
+      <h2 className="title-primary">Фото звітність</h2>
+      <h3 className="title-secondary">Що ми робимо</h3>
+      <p className="description">
         Наша діяльність допомогає тисячам бійців. що воюють за нашу свободу
       </p>
-      <div className="flex flex-wrap gap-5 justify-center mt-9 lg:mt-12">
-        {portfolioItems.map((item, index) => (
-          <PortfolioItem key={index} {...item} className="rounded-3xl" />
-        ))}
+
+      <div className="portfolio-slider">
+        <Slider {...settings}>
+          {portfolioItems.map((item, index) => (
+            <PortfolioItem key={index} {...item} />
+          ))}
+        </Slider>
       </div>
-      <button className="px-9 lg:px-12 py-2.5 lg:py-3 mt-12 text-base font-bold text-blue-500 border border-blue-500 rounded-3xl shadow">
-        Дивитися ще
-      </button>
     </section>
   );
 };
 
-const PortfolioItem = ({ imageSrc, title }) => (
-  <div className="flex relative flex-col px-7 pt-64 pb-6 mt-9 w-full text-2xl font-bold tracking-normal leading-none text-white aspect-square max-w-[300px] rounded-[30px]">
-    <img
-      src={imageSrc}
-      alt={title}
-      className="object-cover absolute inset-0 size-full rounded-3xl"
-    />
-    {title}
+const PortfolioItem = ({ imageSrc }) => (
+  <div className="portfolio-item">
+    <img src={imageSrc} alt="" className="portfolio-image" />
   </div>
 );
