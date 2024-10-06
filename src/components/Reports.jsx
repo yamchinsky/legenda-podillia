@@ -62,6 +62,10 @@ export const Reports = () => {
                   />
                 }
                 onClick={() => {
+                  const owner = import.meta.env.VITE_GITHUB_OWNER;
+                  const repo = import.meta.env.VITE_GITHUB_REPO;
+                  const path = import.meta.env.VITE_GITHUB_REPO_PATH;
+
                   const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
                   const fileUrl = isLocal 
                     ? `/reports/${file.name}` 
