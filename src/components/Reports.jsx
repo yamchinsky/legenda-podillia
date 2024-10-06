@@ -69,9 +69,9 @@ export const Reports = () => {
                   const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
                   const fileUrl = isLocal 
                     ? `/reports/${file.name}` 
-                    : `https://github.com/${owner}/${repo}/blob/main/${path}/${file.name}`;
+                    : `https://raw.githubusercontent.com/${owner}/${repo}/main/${path}/${file.name}`;
                   window.open(fileUrl, "_blank");
-                }}                
+                }}                               
               >
                 <Text
                   ellipsis={{ tooltip: file.name }}
